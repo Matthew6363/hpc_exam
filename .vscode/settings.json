@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.py": "python",
+        "*.jpynb": "python",
+        "stencil_template_parallel.h": "c"
+    }
+}
