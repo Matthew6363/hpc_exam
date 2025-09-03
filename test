@@ -4,7 +4,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8          # OpenMP threads per MPI task
 #SBATCH --mem=0                     # use all available memory
-#SBATCH --partition=GENOA
+#SBATCH --partition=EPYC
 #SBATCH -t 00:00:20                 # 5 minutes for profiling and test runs
 #SBATCH --job-name=testing
 
@@ -18,12 +18,12 @@ export OMP_DISPLAY_AFFINITY=TRUE
 module load openMPI/5.0.5
 
 # Executable base name
-EXEC=./stencil_parallel
+EXEC=./main
 
 # Arguments to executable
 ARGS="-x 10000 -y 10000 -n 50 -o 0"
 
 echo "Running default, non-optimized version"
-make clean
-make MODE=parallel CFLAGS="-O3 -march=native -fopenmp -Iinclude"
+mpicc -o main -O3  -Iinclude stencil_template_parallel.c
+mpirun --map-by none -np 1 ./main -x 256 -y 256 -n 100 -e 30 -p 1 > output.log
 $EXEC $ARGS > default_run.log
