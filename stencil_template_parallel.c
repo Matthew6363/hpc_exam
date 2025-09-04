@@ -87,8 +87,7 @@ int main(int argc, char **argv)
 
     // [A] fill the buffers, and/or make the buffers' pointers pointing to the correct position
     // fill_send_buffers(buffers[SEND], &planes[current]);
-    fill_buffers(buffers, &planes[current], neighbours, periodic);
-    printf("buffers filled\n");
+    fill_buffers(buffers, &planes[current], neighbours, periodic, N);
 
     // [B] perfoem the halo communications
     //     (1) use Send / Recv
@@ -98,15 +97,12 @@ int main(int argc, char **argv)
     // sending to which neighbour, thous he will know what it is receiving
 
     MPI_calls(buffers, planes[current].size, neighbours, myCOMM_WORLD, reqs);
-    printf("MPI calls\n");
 
     MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);
-    printf("MPI_wait\n");
 
     // [C] copy the haloes data
 
-    copy_received_halos(buffers, &planes[current], neighbours, periodic);
-    printf("haloes\n");
+    copy_received_halos(buffers, &planes[current], neighbours, periodic, N);
 
     /* --------------------------------------  */
     /* update grid points */
@@ -147,7 +143,7 @@ int main(int argc, char **argv)
    =   routines called within the integration loop                          =
    ========================================================================== */
 
-void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int periodic)
+void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int periodic, vec2_t N)
 {
   const uint sizey = plane->size[_y_];
   const uint sizex = plane->size[_x_];
@@ -155,12 +151,10 @@ void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int perio
 
   buffers[SEND][NORTH] = &plane->data[IDX(1, 1)];     // point to first element of first internal row
   buffers[SEND][SOUTH] = &plane->data[IDX(1, sizey)]; // point to first element of last internal row
-
-  if (!periodic){
   buffers[RECV][NORTH] = &plane->data[IDX(1, 0)];
   buffers[RECV][SOUTH] = &plane->data[IDX(1, sizey + 1)];
-  }
-  else{
+
+  if (periodic && N[_y_] == 2){
       buffers[RECV][NORTH] = &plane->data[IDX(1, sizey + 1)];
   
       buffers[RECV][SOUTH] = &plane->data[IDX(1,0)];
@@ -217,7 +211,7 @@ int MPI_calls(buffers_t *buffers, vec2_t size, int *neighbours, MPI_Comm comm, M
 }
 
 void copy_received_halos(buffers_t *buffers, plane_t *plane,
-                         int *neighbours, int periodic)
+                         int *neighbours, int periodic, vec2_t N)
 {
 
   const uint sizey = plane->size[_y_];
@@ -246,8 +240,8 @@ void copy_received_halos(buffers_t *buffers, plane_t *plane,
     }
   }
 
-  if (periodic){
-    for(int j = 0; j < sizex; j++){
+  if (periodic && N[_x_] == 2){
+    for(int j = 0; j < sizey; j++){
     plane->data[IDX(0, j+1)] = buffers[RECV][EAST][j];
     plane->data[IDX(sizex+1, j+1)] = buffers[RECV][WEST][j];
   }

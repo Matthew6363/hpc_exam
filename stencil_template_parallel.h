@@ -142,12 +142,12 @@ inline int inject_energy ( const int      periodic,
 
 
 
-extern void fill_buffers(buffers_t *, plane_t *, int *, int );
+extern void fill_buffers(buffers_t *, plane_t *, int *, int, vec2_t );
 
 extern int MPI_calls(buffers_t *, vec2_t , int *, MPI_Comm, MPI_Request * );
 
 extern void copy_received_halos(buffers_t *, plane_t *,
-                         int *, int);
+                         int *, int, vec2_t);
 
 inline int update_plane ( const int      periodic, 
                           const vec2_t   N,         // the grid of MPI tasks
@@ -199,17 +199,25 @@ inline int update_plane ( const int      periodic,
 
     if ( periodic )
         {
-            if ( N[_x_] == 1 )
-                {
-                    // propagate the boundaries as needed
-                    // check the serial version
-                }
-  
-            if ( N[_y_] == 1 ) 
-                {
-                    // propagate the boundaries as needed
-                    // check the serial version
-                }
+            if (N[_x_] == 1) // all proc in a single column, called by every proc
+        {
+            // propagate the boundaries as needed
+
+            for(int j = 0; j < xsize; j++){
+                new[IDX(0, j+1)] = new[IDX(xsize, j+1)];
+                new[IDX(xsize+1, j+1)] = new[IDX(1, j+1)];
+            }
+            // check the serial version
+        }
+
+        if (N[_y_] == 1)
+        {
+
+            for(int j = 0; j < ysize; j++){
+                new[IDX(j+1, 0)] = new[IDX(j+1, ysize)];
+                new[IDX(j+1, ysize+1)] = new[IDX(j+1, 1)];
+            }
+        }
         }
 
     
