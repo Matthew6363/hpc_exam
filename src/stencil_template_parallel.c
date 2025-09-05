@@ -6,7 +6,7 @@
  *
  */
 
-#include "stencil_template_parallel.h"
+#include "../libraries/stencil_template_parallel.h"
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
@@ -105,9 +105,9 @@ int main(int argc, char **argv)
     }
 
     // optional: dump data for visualization
-    // commented out to avoid creation of too many files
+    //commented out to avoid creation of too many files
     // char filename[100];
-    // sprintf(filename, "data_parallel/%d_plane_%05d.bin", Rank, iter);
+    // sprintf(filename, "src/data_parallel/%d_plane_%05d.bin", Rank, iter);
     // int dump_status = dump(planes[!current].data, planes[!current].size, filename);
     // if (dump_status != 0)
     // {
@@ -120,13 +120,15 @@ int main(int argc, char **argv)
 
   t1 = MPI_Wtime() - t1;
 
+  printf("---------Rank: %d \t Elapsed time:%.6f---------\n", Rank, t1);
+
   output_energy_stat(-1, &planes[!current], Niterations * Nsources * energy_per_source, Rank, &myCOMM_WORLD);
 
   memory_release(planes, buffers); // free allocated memory
 
   MPI_Finalize(); // finalize MPI environment
-  if (Rank == 0)
-    printf("Total time: %f seconds\n", t1);
+  // if (Rank == 0)
+  //   printf("Total time: %f seconds\n", t1);
   return 0;
 }
 
@@ -872,8 +874,8 @@ int output_energy_stat(int step, plane_t *plane, double budget, int Me, MPI_Comm
   return 0;
 }
 
-// dump function for data visualization:
-// creidts: Davide Zorzetto
+//dump function for data visualization:
+//creidts: Davide Zorzetto
 // int dump(const double *data, const uint size[2], const char *filename)
 // {
 //   if ((filename != NULL) && (filename[0] != '\0'))
