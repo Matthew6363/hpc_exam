@@ -186,7 +186,7 @@ inline int update_plane ( const int      periodic,
     double * restrict old = oldplane->data;
     double * restrict new = newplane->data;
     
-    # pragma gcc unroll 4
+    # pragma gcc unroll 8
     for (uint j = 1; j <= ysize; j++)
         for ( uint i = 1; i <= xsize; i++)
             {
@@ -202,8 +202,8 @@ inline int update_plane ( const int      periodic,
                 // HINT : check the serial version for some optimization
                 //
                 new[ IDX(i,j) ] =
-                    old[ IDX(i,j) ] / 2.0 + ( old[IDX(i-1, j)] + old[IDX(i+1, j)] +
-                                              old[IDX(i, j-1)] + old[IDX(i, j+1)] ) /4.0 / 2.0;
+                    old[ IDX(i,j) ] * 0.5 + ( old[IDX(i-1, j)] + old[IDX(i+1, j)] +
+                                              old[IDX(i, j-1)] + old[IDX(i, j+1)] ) * 0.125;
                 
             }
 

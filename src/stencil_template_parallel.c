@@ -100,6 +100,8 @@ int main(int argc, char **argv)
     /* update grid points */
     update_border_plane(periodic, N, &planes[current], &planes[!current]);
 
+    // update_plane(periodic, N, &planes[current], &planes[!current]);
+
     /* output if needed */
     if (output_energy_stat_perstep)
     {
@@ -217,9 +219,8 @@ inline double stencil_computation(const double *restrict old,
                                   const uint j)
 {
   const uint idx = j * fxsize + i;
-  return old[idx] / 2.0 + (old[idx - 1] + old[idx + 1] +
-                           old[idx - fxsize] + old[idx + fxsize]) /
-                              4.0 / 2.0;
+  return old[idx] * 0.5 + (old[idx - 1] + old[idx + 1] +
+                           old[idx - fxsize] + old[idx + fxsize]) * 0.125;
   }
 
 
