@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   int Niterations; // number of iterations to be performed
   int periodic;    // periodic boundary condition tag
   vec2_t S, N;     // S array with size of the global grid (x,y) and N (x,y) for the process grid
-
+  double waitall_time = 0;
   int Nsources;
   int Nsources_local;    // nr of heat sources within each process
   vec2_t *sources_local; // array with local sources coordinates
@@ -91,7 +91,13 @@ int main(int argc, char **argv)
     MPI_calls(buffers, planes[current].size, neighbours, myCOMM_WORLD, reqs); // perform MPI_calls for send and receive between neighbouring processes
     
     update_inner_plane(&planes[current], &planes[!current]);
-    MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
+    // MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
+    // double inizio, fine;
+    // inizio = MPI_Wtime();
+    // MPI_Waitall(8, reqs, MPI_STATUSES_IGNORE);
+    // fine = MPI_Wtime();
+    // waitall_time += fine - inizio;
+    
 
     // [C] copy the haloes data
     copy_received_halos(buffers, &planes[current], neighbours, periodic, N); // fill halo regions with data received from neighbours
@@ -125,6 +131,7 @@ int main(int argc, char **argv)
   t1 = MPI_Wtime() - t1;
 
   printf("---------Rank: %d \t Elapsed time:%.6f---------\n", Rank, t1);
+  printf("Tempo trascorso in MPI_Waitall: %lf secondi\n", waitall_time);
 
   output_energy_stat(-1, &planes[!current], Niterations * Nsources * energy_per_source, Rank, &myCOMM_WORLD);
 
