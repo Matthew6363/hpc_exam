@@ -89,6 +89,8 @@ int main(int argc, char **argv)
 
     // [B] perform the halo communications
     MPI_calls(buffers, planes[current].size, neighbours, myCOMM_WORLD, reqs); // perform MPI_calls for send and receive between neighbouring processes
+    
+    update_inner_plane(&planes[current], &planes[!current]);
     MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
 
     // [C] copy the haloes data
@@ -96,7 +98,7 @@ int main(int argc, char **argv)
 
     /* --------------------------------------  */
     /* update grid points */
-    update_plane(periodic, N, &planes[current], &planes[!current]);
+    update_border_plane(periodic, N, &planes[current], &planes[!current]);
 
     /* output if needed */
     if (output_energy_stat_perstep)
@@ -144,10 +146,15 @@ void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int perio
 #define IDX(i, j) ((j) * (sizex + 2) + (i))
 
   // direct point buffers to correct position within the plane (no memory allocation needed due contiguity)
-  buffers[SEND][NORTH] = &plane->data[IDX(1, 1)];         // point to first element of first internal row
-  buffers[SEND][SOUTH] = &plane->data[IDX(1, sizey)];     // point to first element of last internal row
-  buffers[RECV][NORTH] = &plane->data[IDX(1, 0)];         // point to firs element of first halo row
-  buffers[RECV][SOUTH] = &plane->data[IDX(1, sizey + 1)]; // point to first element of last halo row
+  if (neighbours[NORTH] != MPI_PROC_NULL ){
+    buffers[SEND][NORTH] = &plane->data[IDX(1, 1)];         // point to first element of first internal row
+    buffers[RECV][NORTH] = &plane->data[IDX(1, 0)];         // point to firs element of first halo row
+  }
+
+  if (neighbours[SOUTH] != MPI_PROC_NULL ){
+    buffers[SEND][SOUTH] = &plane->data[IDX(1, sizey)];     // point to first element of last internal row
+    buffers[RECV][SOUTH] = &plane->data[IDX(1, sizey + 1)]; // point to first element of last halo row
+  }
 
   // handle periodic boundary conditions for NORTH and SOUTH
   if (periodic && N[_y_] == 2)
@@ -163,7 +170,7 @@ void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int perio
       buffers[SEND][WEST][j] = plane->data[IDX(1, j + 1)];
   }
   if (neighbours[EAST] != MPI_PROC_NULL)
-  {
+  {\
     for (int j = 0; j < sizey; j++)
       buffers[SEND][EAST][j] = plane->data[IDX(sizex, j + 1)];
   }
@@ -204,6 +211,19 @@ int MPI_calls(buffers_t *buffers, vec2_t size, int *neighbours, MPI_Comm comm, M
   return 0;
 }
 
+inline double stencil_computation(const double *restrict old,
+                                  const uint fxsize,
+                                  const uint i,
+                                  const uint j)
+{
+  const uint idx = j * fxsize + i;
+  return old[idx] / 2.0 + (old[idx - 1] + old[idx + 1] +
+                           old[idx - fxsize] + old[idx + fxsize]) /
+                              4.0 / 2.0;
+  }
+
+
+
 void copy_received_halos(buffers_t *buffers, plane_t *plane,
                          int *neighbours, int periodic, vec2_t N)
 {
@@ -241,6 +261,85 @@ void copy_received_halos(buffers_t *buffers, plane_t *plane,
   }
 
 #undef IDX
+}
+
+inline int update_inner_plane(const plane_t *oldplane,
+                              plane_t *newplane)
+{
+  uint fxsize = oldplane->size[_x_] + 2;
+  uint fysize = oldplane->size[_y_] + 2;
+
+  uint xsize = oldplane->size[_x_];
+  uint ysize = oldplane->size[_y_];
+
+#define IDX(i, j) ((j) * fxsize + (i))
+
+  double *restrict old = oldplane->data;
+  double *restrict new = newplane->data;
+
+#pragma omp parallel for collapse(2) schedule(static)
+  for (uint j = 2; j <= ysize - 1; j++)
+    for (uint i = 2; i <= xsize - 1; i++)
+      new[IDX(i, j)] = stencil_computation(old, fxsize, i, j);
+
+#undef IDX
+  return 0;
+}
+
+inline int update_border_plane(const int periodic,
+                               const vec2_t N,
+                               const plane_t *oldplane,
+                               plane_t *newplane)
+{
+  uint register fxsize = oldplane->size[_x_] + 2;
+  uint register fysize = oldplane->size[_y_] + 2;
+
+  uint register xsize = oldplane->size[_x_];
+  uint register ysize = oldplane->size[_y_];
+
+#define IDX(i, j) ((j) * fxsize + (i))
+
+  double *restrict old = oldplane->data;
+  double *restrict new = newplane->data;
+
+#pragma omp parallel for schedule(static)
+  for (uint j = 1; j <= ysize; j++)
+  {
+    new[IDX(1, j)] = stencil_computation(old, fxsize, 1, j);         // left border
+    new[IDX(xsize, j)] = stencil_computation(old, fxsize, xsize, j); // right border
+  }
+
+#pragma omp parallel for schedule(static)
+  for (uint i = 1; i <= xsize; i++)
+  {
+    new[IDX(i, 1)] = stencil_computation(old, fxsize, i, 1);         // top border
+    new[IDX(i, ysize)] = stencil_computation(old, fxsize, i, ysize); // bottom border
+  }
+
+  // If periodic, wrap
+  if (periodic)
+  {
+    if (N[_x_] == 1)
+    {
+      for (uint j = 1; j <= ysize; j++)
+      {
+        new[IDX(0, j)] = new[IDX(xsize, j)];     // left ghost <-- right inner boundary
+        new[IDX(xsize + 1, j)] = new[IDX(1, j)]; // right ghost <-- left inner boundary
+      }
+    }
+
+    if (N[_y_] == 1)
+    {
+      for (uint i = 0; i <= xsize + 1; i++)
+      {
+        new[IDX(i, 0)] = new[IDX(i, ysize)];     // bottom ghost <-- top inner boundary
+        new[IDX(i, ysize + 1)] = new[IDX(i, 1)]; // top ghost <-- bottom inner boundary
+      }
+    }
+  }
+
+#undef IDX
+  return 0;
 }
 /* ==========================================================================
    =                                                                        =

@@ -101,7 +101,6 @@ inline int inject_energy ( const int      periodic,
     double * restrict data = plane->data;
     
    #define IDX( i, j ) ( (j)*sizex + (i) )
-   #pragma omp parallel for
     for (int s = 0; s < Nsources; s++)
         {
             int x = Sources[s][_x_];
@@ -140,7 +139,18 @@ inline int inject_energy ( const int      periodic,
   return 0;
 }
 
+extern inline double stencil_computation(const double *restrict,
+                                  const uint,
+                                  const uint,
+                                  const uint);
 
+extern inline int update_inner_plane(const plane_t *,
+                              plane_t *);
+
+extern inline int update_border_plane(const int ,
+                               const vec2_t ,
+                               const plane_t *,
+                               plane_t *);
 
 extern void fill_buffers(buffers_t *, plane_t *, int *, int, vec2_t );
 
@@ -176,7 +186,7 @@ inline int update_plane ( const int      periodic,
     double * restrict old = oldplane->data;
     double * restrict new = newplane->data;
     
-    # pragma omp parallel for collapse(2)
+    # pragma gcc unroll 4
     for (uint j = 1; j <= ysize; j++)
         for ( uint i = 1; i <= xsize; i++)
             {
@@ -203,7 +213,7 @@ inline int update_plane ( const int      periodic,
         {
             // propagate the boundaries as needed
 
-            for(int j = 0; j < xsize; j++){
+            for(int j = 0; j < ysize; j++){
                 new[IDX(0, j+1)] = new[IDX(xsize, j+1)];
                 new[IDX(xsize+1, j+1)] = new[IDX(1, j+1)];
             }
@@ -213,7 +223,7 @@ inline int update_plane ( const int      periodic,
         if (N[_y_] == 1)
         {
 
-            for(int j = 0; j < ysize; j++){
+            for(int j = 0; j < xsize; j++){
                 new[IDX(j+1, 0)] = new[IDX(j+1, ysize)];
                 new[IDX(j+1, ysize+1)] = new[IDX(j+1, 1)];
             }
@@ -254,7 +264,7 @@ inline int get_total_energy( plane_t *plane,
     //       (ii) ask the compiler to do it
     // for instance
     // #pragma GCC unroll 4
-    #pragma omp parallel for reduction(+:totenergy) collapse(2) schedule (static)
+    #pragma omp parallel for reduction(+:totenergy) schedule (static)
     for ( int j = 1; j <= ysize; j++ )
         for ( int i = 1; i <= xsize; i++ )
             totenergy += data[ IDX(i, j) ];
