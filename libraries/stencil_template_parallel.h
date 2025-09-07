@@ -186,7 +186,7 @@ inline int update_plane ( const int      periodic,
     double * restrict old = oldplane->data;
     double * restrict new = newplane->data;
     
-    # pragma gcc unroll 8
+    # pragma omp parallel for schedule(static) 
     for (uint j = 1; j <= ysize; j++)
         for ( uint i = 1; i <= xsize; i++)
             {

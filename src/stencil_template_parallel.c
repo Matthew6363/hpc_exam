@@ -976,33 +976,33 @@ int output_energy_stat(int step, plane_t *plane, double budget, int Me, MPI_Comm
 
 //dump function for data visualization:
 //creidts: Davide Zorzetto
-int dump(const double *data, const uint size[2], const char *filename)
-{
-  if ((filename != NULL) && (filename[0] != '\0'))
-  {
-    FILE *outfile = fopen(filename, "w");
-    if (outfile == NULL)
-      return 2;
+// int dump(const double *data, const uint size[2], const char *filename)
+// {
+//   if ((filename != NULL) && (filename[0] != '\0'))
+//   {
+//     FILE *outfile = fopen(filename, "w");
+//     if (outfile == NULL)
+//       return 2;
 
-    float *array = (float *)malloc(size[0] * sizeof(float));
+//     float *array = (float *)malloc(size[0] * sizeof(float));
 
-    for (int j = 1; j <= size[1]; j++)
-    {
-      const double *restrict line = data + j * (size[0] + 2);
-      for (int i = 1; i <= size[0]; i++)
-      {
-        // int cut = line[i] < 100;
-        array[i - 1] = (float)line[i];
-      }
-      // printf("\n");
-      fwrite(array, sizeof(float), size[0], outfile);
-    }
+//     for (int j = 1; j <= size[1]; j++)
+//     {
+//       const double *restrict line = data + j * (size[0] + 2);
+//       for (int i = 1; i <= size[0]; i++)
+//       {
+//         // int cut = line[i] < 100;
+//         array[i - 1] = (float)line[i];
+//       }
+//       // printf("\n");
+//       fwrite(array, sizeof(float), size[0], outfile);
+//     }
 
-    free(array);
+//     free(array);
 
-    fclose(outfile);
-    return 0;
-  }
+//     fclose(outfile);
+//     return 0;
+//   }
 
-  return 1;
-}
+//   return 1;
+// }
