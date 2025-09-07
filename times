@@ -1,0 +1,51 @@
+#periodic
+
+1 node--------- 1 process--------1 thread
+---------Rank: 0 	 Elapsed time:137.962309---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+1 node--------- 1 process--------4 thread
+---------Rank: 0 	 Elapsed time:72.575350---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+1 node--------- 1 process--------16 thread
+---------Rank: 0 	 Elapsed time:64.907754---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+1 node--------- 1 process--------32 thread
+---------Rank: 0 	 Elapsed time:33.057059---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+1 node--------- 1 process--------64 thread
+---------Rank: 0 	 Elapsed time:17.777716---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+1 node--------- 1 process--------128 thread
+---------Rank: 0 	 Elapsed time:9.792301---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+#nonperiodic
+
+1 node--------- 1 process--------1 thread
+---------Rank: 0 	 Elapsed time:137.767033---------
+total injected energy is 300000, system energy is 299523 ( in avg 0.00299523 per grid point)
+
+1 node--------- 1 process--------4 thread
+---------Rank: 0 	 Elapsed time:72.006081---------
+total injected energy is 300000, system energy is 297941 ( in avg 0.00297941 per grid point)
+
+1 node--------- 1 process--------16 thread
+---------Rank: 0 	 Elapsed time:64.374199---------
+total injected energy is 300000, system energy is 299171 ( in avg 0.00299171 per grid point)
+
+1 node--------- 1 process--------32 thread
+---------Rank: 0 	 Elapsed time:32.411797---------
+total injected energy is 300000, system energy is 298752 ( in avg 0.00298752 per grid point)
+
+1 node--------- 1 process--------64 thread
+---------Rank: 0 	 Elapsed time:16.567849---------
+total injected energy is 300000, system energy is 299398 ( in avg 0.00299398 per grid point)
+
+1 node--------- 1 process--------128 thread
+---------Rank: 0 	 Elapsed time:8.591904---------
+total injected energy is 300000, system energy is 296232 ( in avg 0.00296232 per grid point)

@@ -145,7 +145,7 @@ void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int perio
 {
   const uint sizey = plane->size[_y_];
   const uint sizex = plane->size[_x_];
-#define IDX(i, j) ((j) * (sizex + 2) + (i))
+  #define IDX(i, j) ((j) * (sizex + 2) + (i))
 
   // direct point buffers to correct position within the plane (no memory allocation needed due contiguity)
   if (neighbours[NORTH] != MPI_PROC_NULL ){
@@ -172,7 +172,7 @@ void fill_buffers(buffers_t *buffers, plane_t *plane, int *neighbours, int perio
       buffers[SEND][WEST][j] = plane->data[IDX(1, j + 1)];
   }
   if (neighbours[EAST] != MPI_PROC_NULL)
-  {\
+  {
     for (int j = 0; j < sizey; j++)
       buffers[SEND][EAST][j] = plane->data[IDX(sizex, j + 1)];
   }
