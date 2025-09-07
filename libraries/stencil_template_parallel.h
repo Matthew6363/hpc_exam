@@ -186,7 +186,7 @@ inline int update_plane ( const int      periodic,
     double * restrict old = oldplane->data;
     double * restrict new = newplane->data;
     
-    # pragma GCC unroll 8
+    # pragma gcc unroll 8
     for (uint j = 1; j <= ysize; j++)
         for ( uint i = 1; i <= xsize; i++)
             {
@@ -264,7 +264,7 @@ inline int get_total_energy( plane_t *plane,
     //       (ii) ask the compiler to do it
     // for instance
     // #pragma GCC unroll 4
-    #pragma omp parallel for reduction(+:totenergy) schedule(static)
+    #pragma omp parallel for reduction(+:totenergy) schedule (static)
     for ( int j = 1; j <= ysize; j++ )
         for ( int i = 1; i <= xsize; i++ )
             totenergy += data[ IDX(i, j) ];

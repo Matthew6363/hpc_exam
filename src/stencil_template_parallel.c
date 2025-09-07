@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   int Niterations; // number of iterations to be performed
   int periodic;    // periodic boundary condition tag
   vec2_t S, N;     // S array with size of the global grid (x,y) and N (x,y) for the process grid
-  double waitall_time = 0;
+
   int Nsources;
   int Nsources_local;    // nr of heat sources within each process
   vec2_t *sources_local; // array with local sources coordinates
@@ -90,23 +90,17 @@ int main(int argc, char **argv)
     // [B] perform the halo communications
     MPI_calls(buffers, planes[current].size, neighbours, myCOMM_WORLD, reqs); // perform MPI_calls for send and receive between neighbouring processes
     
-    update_inner_plane(&planes[current], &planes[!current]);
-    // MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
-    // double inizio, fine;
-    // inizio = MPI_Wtime();
-    // MPI_Waitall(8, reqs, MPI_STATUSES_IGNORE);
-    // fine = MPI_Wtime();
-    // waitall_time += fine - inizio;
-    
+    //update_inner_plane(&planes[current], &planes[!current]);
+    MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
 
     // [C] copy the haloes data
     copy_received_halos(buffers, &planes[current], neighbours, periodic, N); // fill halo regions with data received from neighbours
 
     /* --------------------------------------  */
     /* update grid points */
-    update_border_plane(periodic, N, &planes[current], &planes[!current]);
+    //update_border_plane(periodic, N, &planes[current], &planes[!current]);
 
-    // update_plane(periodic, N, &planes[current], &planes[!current]);
+    update_plane(periodic, N, &planes[current], &planes[!current]);
 
     /* output if needed */
     if (output_energy_stat_perstep)
@@ -116,13 +110,13 @@ int main(int argc, char **argv)
 
     // optional: dump data for visualization
     //commented out to avoid creation of too many files
-    // char filename[100];
-    // sprintf(filename, "src/data_parallel/%d_plane_%05d.bin", Rank, iter);
-    // int dump_status = dump(planes[!current].data, planes[!current].size, filename);
-    // if (dump_status != 0)
-    // {
-    //   fprintf(stderr, "Error in dump_status. Exit with %d\n", dump_status);
-    // }
+    char filename[100];
+    sprintf(filename, "src/data_parallel/%d_plane_%05d.bin", Rank, iter);
+    int dump_status = dump(planes[!current].data, planes[!current].size, filename);
+    if (dump_status != 0)
+    {
+      fprintf(stderr, "Error in dump_status. Exit with %d\n", dump_status);
+    }
 
     /* swap plane indexes for the new iteration */
     current = !current;
@@ -131,7 +125,6 @@ int main(int argc, char **argv)
   t1 = MPI_Wtime() - t1;
 
   printf("---------Rank: %d \t Elapsed time:%.6f---------\n", Rank, t1);
-  printf("Tempo trascorso in MPI_Waitall: %lf secondi\n", waitall_time);
 
   output_energy_stat(-1, &planes[!current], Niterations * Nsources * energy_per_source, Rank, &myCOMM_WORLD);
 
@@ -983,33 +976,33 @@ int output_energy_stat(int step, plane_t *plane, double budget, int Me, MPI_Comm
 
 //dump function for data visualization:
 //creidts: Davide Zorzetto
-// int dump(const double *data, const uint size[2], const char *filename)
-// {
-//   if ((filename != NULL) && (filename[0] != '\0'))
-//   {
-//     FILE *outfile = fopen(filename, "w");
-//     if (outfile == NULL)
-//       return 2;
+int dump(const double *data, const uint size[2], const char *filename)
+{
+  if ((filename != NULL) && (filename[0] != '\0'))
+  {
+    FILE *outfile = fopen(filename, "w");
+    if (outfile == NULL)
+      return 2;
 
-//     float *array = (float *)malloc(size[0] * sizeof(float));
+    float *array = (float *)malloc(size[0] * sizeof(float));
 
-//     for (int j = 1; j <= size[1]; j++)
-//     {
-//       const double *restrict line = data + j * (size[0] + 2);
-//       for (int i = 1; i <= size[0]; i++)
-//       {
-//         // int cut = line[i] < 100;
-//         array[i - 1] = (float)line[i];
-//       }
-//       // printf("\n");
-//       fwrite(array, sizeof(float), size[0], outfile);
-//     }
+    for (int j = 1; j <= size[1]; j++)
+    {
+      const double *restrict line = data + j * (size[0] + 2);
+      for (int i = 1; i <= size[0]; i++)
+      {
+        // int cut = line[i] < 100;
+        array[i - 1] = (float)line[i];
+      }
+      // printf("\n");
+      fwrite(array, sizeof(float), size[0], outfile);
+    }
 
-//     free(array);
+    free(array);
 
-//     fclose(outfile);
-//     return 0;
-//   }
+    fclose(outfile);
+    return 0;
+  }
 
-//   return 1;
-// }
+  return 1;
+}
