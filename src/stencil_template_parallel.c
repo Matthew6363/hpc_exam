@@ -110,13 +110,13 @@ int main(int argc, char **argv)
 
     // optional: dump data for visualization
     //commented out to avoid creation of too many files
-    char filename[100];
-    sprintf(filename, "src/data_parallel/%d_plane_%05d.bin", Rank, iter);
-    int dump_status = dump(planes[!current].data, planes[!current].size, filename);
-    if (dump_status != 0)
-    {
-      fprintf(stderr, "Error in dump_status. Exit with %d\n", dump_status);
-    }
+    // char filename[100];
+    // sprintf(filename, "src/data_parallel/%d_plane_%05d.bin", Rank, iter);
+    // int dump_status = dump(planes[!current].data, planes[!current].size, filename);
+    // if (dump_status != 0)
+    // {
+    //   fprintf(stderr, "Error in dump_status. Exit with %d\n", dump_status);
+    // }
 
     /* swap plane indexes for the new iteration */
     current = !current;
