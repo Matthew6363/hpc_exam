@@ -1,0 +1,30 @@
+#!bin/sh
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=128
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem=0
+#SBATCH --partition dcgp_usr_prod
+#SBATCH -A uTS25_Tornator_0
+#SBATCH -t 00:30:00
+#SBATCH --job-name=test
+##SBATCH --exclusive
+# =======================================================
+
+module load openmpi/4.1.6--gcc--12.2.0
+
+
+#export OMP_NUM_THREADS=
+export OMP_PLACES=cores
+export OMP_PROC_BIND=close
+
+
+mpicc -march=native -O2 -std=c17 -fopenmp -Iinclude ../src/stencil_template_parallel.c -o stencil_parallel
+mkdir -p ../outputs/outputs_leonardo
+
+for nt in 1 2 4 8 16 32 64 128
+do
+    export OMP_NUM_THREADS=$nt
+    echo "Running wih $nt threads"
+    datetime=$(date +"%Y%m%d_%H%M%s")
+    srun --ntasks=1 --cpus-per-task=$nt ./main -p 1 -o 0 -e 300 -v 1 > ../outputs/outputs_leonardo/output_${datetime}_1Task_${nt}Threads_.log
+done
