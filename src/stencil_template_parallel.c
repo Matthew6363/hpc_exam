@@ -83,10 +83,11 @@ int main(int argc, char **argv)
       reqs[k] = MPI_REQUEST_NULL; // initialize all requests to NULL
 
     /* new energy from sources */
+    // double t0= MPI_Wtime();
     inject_energy(periodic, Nsources_local, sources_local, energy_per_source, &planes[current], N);
 
     /* -------------------------------------- */
-    // double t0= MPI_Wtime();
+    
     // [A] fill the buffers, and/or make the buffers' pointers pointing to the correct position
     fill_buffers(buffers, &planes[current], neighbours, periodic, N);
 
@@ -97,6 +98,7 @@ int main(int argc, char **argv)
     MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
      
     // [C] copy the haloes data
+    
     copy_received_halos(buffers, &planes[current], neighbours, periodic, N); // fill halo regions with data received from neighbours
     
     /* --------------------------------------  */
@@ -140,8 +142,8 @@ int main(int argc, char **argv)
   //   double comm_mean_all = comm_sum_all/((double)P);
   //   double comp_mean_all = comp_sum_all/((double)P);
 
-  //   printf("Elapsed time for communication (mean):%.16f---------\n", comm_mean_all);
-  //   printf("Elapsed time for computations (mean):%.16f---------\n", comp_mean_all);
+  //   printf("Elapsed time for communication (mean):%.6f---------\n", comm_mean_all);
+  //   printf("Elapsed time for computations (mean):%.6f---------\n", comp_mean_all);
   // }
 
   printf("---------Rank: %d \t Elapsed time:%.6f---------\n", Rank, t1);
