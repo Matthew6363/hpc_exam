@@ -1,4 +1,4 @@
-#!bin/sh
+#!/bin/sh
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=128
 #SBATCH --ntasks-per-node=1
@@ -7,7 +7,7 @@
 #SBATCH -A uTS25_Tornator_0
 #SBATCH -t 00:30:00
 #SBATCH --job-name=test
-##SBATCH --exclusive
+#SBATCH --exclusive
 # =======================================================
 
 module load openmpi/4.1.6--gcc--12.2.0

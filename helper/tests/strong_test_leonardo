@@ -1,0 +1,27 @@
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=128
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem=0
+#SBATCH --partition dcgp_usr_prod
+#SBATCH -A uTS25_Tornator_0
+#SBATCH -t 00:30:00
+#SBATCH --job-name=test
+#SBATCH --exclusive
+# =======================================================
+
+module load openmpi/4.1.6--gcc--12.2.0
+
+
+#export OMP_NUM_THREADS=
+export OMP_PLACES=cores
+export OMP_PROC_BIND=close
+
+
+mpicc -march=native -O2 -std=c17 -fopenmp -Iinclude ../src/stencil_template_parallel.c -o stencil_parallel
+mkdir -p ../outputs/outputs_leonardo
+
+
+echo "Running default, non-optimized version"
+mpicc -D_XOPEN_SOURCE=700 -o main -march=native -O2 -std=c17 -fopenmp -Iinclude ../src/stencil_template_parallel.c
+srun --ntasks=32  --cpu-bind=cores  ./main -p 0 -o 0 -e 300 -v 1 > ../outputs/output_strong_3.log

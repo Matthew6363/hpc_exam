@@ -49,3 +49,75 @@ total injected energy is 300000, system energy is 299398 ( in avg 0.00299398 per
 1 node--------- 1 process--------128 thread
 ---------Rank: 0 	 Elapsed time:8.591904---------
 total injected energy is 300000, system energy is 296232 ( in avg 0.00296232 per grid point)
+
+# leonardo thread scaling
+1 node--------- 1 process--------1 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.005480---------
+Elapsed time for computations (mean):172.206150---------
+---------Rank: 0 	 Elapsed time:172.211912---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------2 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.005657---------
+Elapsed time for computations (mean):90.303639---------
+---------Rank: 0 	 Elapsed time:90.309607---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------4 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.005623---------
+Elapsed time for computations (mean):55.690646---------
+---------Rank: 0 	 Elapsed time:55.696601---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------8 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.006583---------
+Elapsed time for computations (mean):43.087521---------
+---------Rank: 0 	 Elapsed time:43.094370---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------16 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.006901---------
+Elapsed time for computations (mean):32.859786---------
+---------Rank: 0 	 Elapsed time:32.866984---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------32 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.006549---------
+Elapsed time for computations (mean):16.559008---------
+---------Rank: 0 	 Elapsed time:16.565926---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------64 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.007712---------
+Elapsed time for computations (mean):8.749420---------
+---------Rank: 0 	 Elapsed time:8.757681---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)
+
+
+1 node--------- 1 process--------112 thread
+Task    0 :: 	grid coordinates :   0,   0
+	neighbours: N   -2    E   -2    S   -2    W   -2
+Elapsed time for communication (mean):0.008079---------
+Elapsed time for computations (mean):5.517010---------
+---------Rank: 0 	 Elapsed time:5.525497---------
+total injected energy is 300000, system energy is 300000 ( in avg 0.003 per grid point)

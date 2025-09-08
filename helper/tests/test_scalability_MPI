@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH --nodes=1                   # 1 node
+#SBATCH --ntasks=2                  # total MPI tasks across nodes
+#SBATCH --ntasks-per-node=2
+#SBATCH --cpus-per-task=16           # OpenMP threads per MPI task
+#SBATCH --mem=0                     # use all available memory
+#SBATCH --partition=GENOA
+#SBATCH -t 00:15:00                 # 5 minutes for profiling and test runs
+#SBATCH --job-name=HPC_Exam
+
+# Set OpenMP variables
+export OMP_PLACES=cores
+export OMP_PROC_BIND=close
+export OMP_DISPLAY_AFFINITY=TRUE
+
+# Load MPI module if needed
+module load openMPI/5.0.5
+
+# Qui ci va mpicc, mpirun etc
+mpicc -D_XOPEN_SOURCE=700 -o main -march=native -O2 -std=c17 -fopenmp -Iinclude ../src/stencil_template_parallel.c
+
+
+    datetime=$(date +"%Y%m%d_%H%M")
+    srun --ntasks=2 --cpus-per-task=16 ./main -p 1 -o 0 -e 300 -v 1 > ../outputs/output_${datetime}_1Task_${nt}Threads_.log
