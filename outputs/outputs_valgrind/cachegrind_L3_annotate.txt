@@ -1,0 +1,345 @@
+--------------------------------------------------------------------------------
+-- Metadata
+--------------------------------------------------------------------------------
+Invocation:       /usr/bin/cg_annotate --auto=yes --show=Dr,D1mr,DLmr,Bc,Bcm outputs_valgrind/cachegrind_L3.out
+I1 cache:         32768 B, 64 B, 8-way associative
+D1 cache:         32768 B, 64 B, 8-way associative
+LL cache:         16777216 B, 64 B, 16-way associative
+Command:          ./stencil_parallel -x 512 -y 512 -o 0 -v 0 -n 100
+Events recorded:  Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw Bc Bcm Bi Bim
+Events shown:     Dr D1mr DLmr Bc Bcm
+Event sort order: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw Bc Bcm Bi Bim
+Threshold:        0.1%
+Annotation:       on
+
+--------------------------------------------------------------------------------
+-- Summary
+--------------------------------------------------------------------------------
+Dr__________________ D1mr______________ DLmr___________ Bc_________________ Bcm_____________ 
+
+162,013,642 (100.0%) 4,478,686 (100.0%) 83,646 (100.0%) 52,017,043 (100.0%) 738,656 (100.0%)  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+-- File:function summary
+--------------------------------------------------------------------------------
+  Dr________________________ D1mr____________________ DLmr_________________ Bc_______________________ Bcm___________________  file:function
+
+< 131,444,796 (81.1%, 81.1%) 3,368,749 (75.2%, 75.2%) 33,151 (39.6%, 39.6%) 26,334,988 (50.6%, 50.6%)  52,165  (7.1%,  7.1%)  /u/ipauser/msimonutti/hpc_exam/helper/../src/../libraries/stencil_template_parallel.h:
+  131,180,000 (81.0%)        3,335,039 (74.5%)        33,147 (39.6%)        26,267,200 (50.5%)         51,623  (7.0%)           update_plane._omp_fn.0
+
+<  22,694,581 (14.0%, 95.1%)   830,768 (18.5%, 93.8%) 22,930 (27.4%, 67.0%) 21,163,788 (40.7%, 91.3%) 527,898 (71.5%, 78.5%)  ???:
+    2,155,420  (1.3%)          288,328  (6.4%)           151  (0.2%)         1,053,364  (2.0%)         98,572 (13.3%)           __strcmp_avx2
+        5,061  (0.0%)              256  (0.0%)             0                 6,746,556 (13.0%)          1,662  (0.2%)           __memset_avx2_unaligned_erms
+    2,049,520  (1.3%)            1,000  (0.0%)            31  (0.0%)         1,161,419  (2.2%)         23,277  (3.2%)           __vfscanf_internal
+      891,026  (0.5%)            7,384  (0.2%)             2  (0.0%)           832,766  (1.6%)         32,546  (4.4%)           _int_malloc
+    1,899,004  (1.2%)           14,218  (0.3%)            51  (0.1%)         1,273,913  (2.4%)         25,912  (3.5%)           getenv
+    1,057,353  (0.7%)           14,435  (0.3%)         3,372  (4.0%)           711,872  (1.4%)          7,105  (1.0%)           _int_free
+    1,080,572  (0.7%)          296,559  (6.6%)             0                 1,027,038  (2.0%)          5,072  (0.7%)           client_connect_to_shmem2_from_buffi
+      649,436  (0.4%)              742  (0.0%)            11  (0.0%)           359,082  (0.7%)          8,465  (1.1%)           __printf_buffer
+      430,862  (0.3%)              369  (0.0%)            24  (0.0%)           620,311  (1.2%)         31,115  (4.2%)           ____strtoul_l_internal
+      750,158  (0.5%)            2,592  (0.1%)             3  (0.0%)           569,086  (1.1%)         17,172  (2.3%)           malloc
+      548,172  (0.3%)                2  (0.0%)             1  (0.0%)           358,656  (0.7%)         21,318  (2.9%)           __strspn_generic
+    1,212,125  (0.7%)           19,975  (0.4%)           128  (0.2%)         1,221,761  (2.3%)         47,765  (6.5%)           __memcpy_avx_unaligned_erms
+    1,461,271  (0.9%)           15,258  (0.3%)           143  (0.2%)               141  (0.0%)             52  (0.0%)           ???
+      610,179  (0.4%)            9,272  (0.2%)         2,492  (3.0%)           243,960  (0.5%)          5,208  (0.7%)           free
+      519,908  (0.3%)                0                     0                   195,590  (0.4%)          3,870  (0.5%)           __printf_buffer_write
+      283,543  (0.2%)            1,258  (0.0%)            42  (0.1%)           256,306  (0.5%)         15,687  (2.1%)           __strncmp_avx2
+      399,841  (0.2%)                1  (0.0%)             0                   240,638  (0.5%)            353  (0.0%)           fgets
+      313,370  (0.2%)           37,383  (0.8%)           227  (0.3%)           204,144  (0.4%)         11,996  (1.6%)           malloc_consolidate
+      317,132  (0.2%)                0                     0                   131,846  (0.3%)          1,507  (0.2%)           _IO_getline_info
+      192,547  (0.1%)           22,840  (0.5%)         5,333  (6.4%)           164,751  (0.3%)         10,823  (1.5%)           __strlen_avx2
+      340,660  (0.2%)               19  (0.0%)             0                   138,967  (0.3%)          4,090  (0.6%)           pmix41_bfrops_base_unpack_general_int
+      153,107  (0.1%)               86  (0.0%)             7  (0.0%)           162,452  (0.3%)          7,169  (1.0%)           __strspn_sse42
+       92,428  (0.1%)              227  (0.0%)             0                    88,013  (0.2%)            764  (0.1%)           flex128_decode_int
+      100,453  (0.1%)                7  (0.0%)             1  (0.0%)           194,622  (0.4%)          4,404  (0.6%)           pmix_bfrops_base_tma_argv_split_inter.constprop.0
+      303,450  (0.2%)           17,342  (0.4%)            15  (0.0%)           140,235  (0.3%)          4,693  (0.6%)           unlink_chunk.isra.0
+       70,744  (0.0%)              875  (0.0%)           220  (0.3%)            70,736  (0.1%)            495  (0.1%)           __strchrnul_avx2
+
+<   1,983,070  (1.2%, 96.4%)    81,688  (1.8%, 95.6%)  2,982  (3.6%, 70.6%)  1,037,203  (2.0%, 93.3%)  35,958  (4.9%, 83.4%)  /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/dl-lookup.c:
+    1,557,153  (1.0%)           73,599  (1.6%)         1,980  (2.4%)           876,543  (1.7%)         30,305  (4.1%)           do_lookup_x
+      281,373  (0.2%)              984  (0.0%)             5  (0.0%)           101,229  (0.2%)          2,147  (0.3%)           _dl_lookup_symbol_x
+
+<     474,972  (0.3%, 96.7%)       349  (0.0%, 95.6%)      2  (0.0%, 70.6%)    216,832  (0.4%, 93.7%)     403  (0.1%, 83.5%)  /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/async/async.c:
+      174,760  (0.1%)               59  (0.0%)             0                    80,680  (0.2%)             47  (0.0%)           ucs_async_handler_get
+
+<     196,489  (0.1%, 96.8%)     8,421  (0.2%, 95.8%)  4,033  (4.8%, 75.4%)    196,489  (0.4%, 94.1%)   9,733  (1.3%, 84.8%)  /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/../sysdeps/generic/dl-new-hash.h:_dl_lookup_symbol_x
+
+<     229,069  (0.1%, 96.9%)       100  (0.0%, 95.8%)      0  (0.0%, 75.4%)     80,809  (0.2%, 94.3%)      54  (0.0%, 84.8%)  /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/sys/event_set.c:
+      228,696  (0.1%)               77  (0.0%)             0                    80,717  (0.2%)             41  (0.0%)           ucs_event_set_wait
+
+<     180,514  (0.1%, 97.0%)        27  (0.0%, 95.8%)      2  (0.0%, 75.4%)    198,920  (0.4%, 94.6%)  10,864  (1.5%, 86.2%)  /u/builder/builder/.jenkins/workspace/Builder/hwloc/build/hwloc/hwloc/topology-xml-nolibxml.c:
+      148,492  (0.1%)                0                     0                   186,225  (0.4%)          9,355  (1.3%)           hwloc__nolibxml_import_next_attr
+
+--------------------------------------------------------------------------------
+-- Function:file summary
+--------------------------------------------------------------------------------
+  Dr________________________ D1mr____________________ DLmr_________________ Bc_______________________ Bcm__________________  function:file
+
+> 131,180,000 (81.0%, 81.0%) 3,335,039 (74.5%, 74.5%) 33,147 (39.6%, 39.6%) 26,267,200 (50.5%, 50.5%) 51,623  (7.0%,  7.0%)  update_plane._omp_fn.0:/u/ipauser/msimonutti/hpc_exam/helper/../src/../libraries/stencil_template_parallel.h
+
+>   2,155,420  (1.3%, 82.3%)   288,328  (6.4%, 80.9%)    151  (0.2%, 39.8%)  1,053,364  (2.0%, 52.5%) 98,572 (13.3%, 20.3%)  __strcmp_avx2:???
+
+>       5,061  (0.0%, 82.3%)       256  (0.0%, 80.9%)      0  (0.0%, 39.8%)  6,746,556 (13.0%, 65.5%)  1,662  (0.2%, 20.6%)  __memset_avx2_unaligned_erms:???
+
+>   2,049,520  (1.3%, 83.6%)     1,000  (0.0%, 80.9%)     31  (0.0%, 39.8%)  1,161,419  (2.2%, 67.7%) 23,277  (3.2%, 23.7%)  __vfscanf_internal:???
+
+>     891,026  (0.5%, 84.1%)     7,384  (0.2%, 81.1%)      2  (0.0%, 39.8%)    832,766  (1.6%, 69.3%) 32,546  (4.4%, 28.1%)  _int_malloc:???
+
+>   1,576,482  (1.0%, 85.1%)    73,599  (1.6%, 82.7%)  1,980  (2.4%, 42.2%)    885,359  (1.7%, 71.0%) 30,327  (4.1%, 32.2%)  do_lookup_x:
+    1,557,153  (1.0%)           73,599  (1.6%)         1,980  (2.4%)           876,543  (1.7%)        30,305  (4.1%)           /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/dl-lookup.c
+
+>   1,899,004  (1.2%, 86.3%)    14,218  (0.3%, 83.1%)     51  (0.1%, 42.3%)  1,273,913  (2.4%, 73.5%) 25,912  (3.5%, 35.7%)  getenv:???
+
+>   1,057,353  (0.7%, 86.9%)    14,435  (0.3%, 83.4%)  3,372  (4.0%, 46.3%)    711,872  (1.4%, 74.8%)  7,105  (1.0%, 36.7%)  _int_free:???
+
+>   1,080,572  (0.7%, 87.6%)   296,559  (6.6%, 90.0%)      0  (0.0%, 46.3%)  1,027,038  (2.0%, 76.8%)  5,072  (0.7%, 37.4%)  client_connect_to_shmem2_from_buffi:???
+
+>     649,436  (0.4%, 88.0%)       742  (0.0%, 90.0%)     11  (0.0%, 46.3%)    359,082  (0.7%, 77.5%)  8,465  (1.1%, 38.5%)  __printf_buffer:???
+
+>     430,862  (0.3%, 88.2%)       369  (0.0%, 90.0%)     24  (0.0%, 46.3%)    620,311  (1.2%, 78.7%) 31,115  (4.2%, 42.7%)  ____strtoul_l_internal:???
+
+>     750,158  (0.5%, 88.7%)     2,592  (0.1%, 90.1%)      3  (0.0%, 46.4%)    569,086  (1.1%, 79.8%) 17,172  (2.3%, 45.1%)  malloc:???
+
+>     548,172  (0.3%, 89.0%)         2  (0.0%, 90.1%)      1  (0.0%, 46.4%)    358,656  (0.7%, 80.5%) 21,318  (2.9%, 47.9%)  __strspn_generic:???
+
+>   1,212,125  (0.7%, 89.8%)    19,975  (0.4%, 90.5%)    128  (0.2%, 46.5%)  1,221,761  (2.3%, 82.8%) 47,765  (6.5%, 54.4%)  __memcpy_avx_unaligned_erms:???
+
+>     477,862  (0.3%, 90.1%)     9,405  (0.2%, 90.7%)  4,038  (4.8%, 51.3%)    297,718  (0.6%, 83.4%) 11,880  (1.6%, 56.0%)  _dl_lookup_symbol_x:
+      196,489  (0.1%)            8,421  (0.2%)         4,033  (4.8%)           196,489  (0.4%)         9,733  (1.3%)           /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/../sysdeps/generic/dl-new-hash.h
+      281,373  (0.2%)              984  (0.0%)             5  (0.0%)           101,229  (0.2%)         2,147  (0.3%)           /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/dl-lookup.c
+
+>   1,461,271  (0.9%, 91.0%)    15,258  (0.3%, 91.1%)    143  (0.2%, 51.5%)        141  (0.0%, 83.4%)     52  (0.0%, 56.0%)  ???:???
+
+>     610,179  (0.4%, 91.4%)     9,272  (0.2%, 91.3%)  2,492  (3.0%, 54.5%)    243,960  (0.5%, 83.9%)  5,208  (0.7%, 56.7%)  free:???
+
+>     519,908  (0.3%, 91.7%)         0  (0.0%, 91.3%)      0  (0.0%, 54.5%)    195,590  (0.4%, 84.3%)  3,870  (0.5%, 57.3%)  __printf_buffer_write:???
+
+>     283,543  (0.2%, 91.9%)     1,258  (0.0%, 91.3%)     42  (0.1%, 54.5%)    256,306  (0.5%, 84.7%) 15,687  (2.1%, 59.4%)  __strncmp_avx2:???
+
+>     399,841  (0.2%, 92.1%)         1  (0.0%, 91.3%)      0  (0.0%, 54.5%)    240,638  (0.5%, 85.2%)    353  (0.0%, 59.4%)  fgets:???
+
+>     313,370  (0.2%, 92.3%)    37,383  (0.8%, 92.1%)    227  (0.3%, 54.8%)    204,144  (0.4%, 85.6%) 11,996  (1.6%, 61.1%)  malloc_consolidate:???
+
+>     317,132  (0.2%, 92.5%)         0  (0.0%, 92.1%)      0  (0.0%, 54.8%)    131,846  (0.3%, 85.9%)  1,507  (0.2%, 61.3%)  _IO_getline_info:???
+
+>     192,547  (0.1%, 92.6%)    22,840  (0.5%, 92.7%)  5,333  (6.4%, 61.2%)    164,751  (0.3%, 86.2%) 10,823  (1.5%, 62.7%)  __strlen_avx2:???
+
+>     228,696  (0.1%, 92.8%)        77  (0.0%, 92.7%)      0  (0.0%, 61.2%)     80,717  (0.2%, 86.3%)     41  (0.0%, 62.7%)  ucs_event_set_wait:/usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/sys/event_set.c
+
+>     148,492  (0.1%, 92.9%)         0  (0.0%, 92.7%)      0  (0.0%, 61.2%)    186,225  (0.4%, 86.7%)  9,355  (1.3%, 64.0%)  hwloc__nolibxml_import_next_attr:/u/builder/builder/.jenkins/workspace/Builder/hwloc/build/hwloc/hwloc/topology-xml-nolibxml.c
+
+>     340,660  (0.2%, 93.1%)        19  (0.0%, 92.7%)      0  (0.0%, 61.2%)    138,967  (0.3%, 87.0%)  4,090  (0.6%, 64.5%)  pmix41_bfrops_base_unpack_general_int:???
+
+>     153,107  (0.1%, 93.2%)        86  (0.0%, 92.7%)      7  (0.0%, 61.2%)    162,452  (0.3%, 87.3%)  7,169  (1.0%, 65.5%)  __strspn_sse42:???
+
+>      92,428  (0.1%, 93.2%)       227  (0.0%, 92.7%)      0  (0.0%, 61.2%)     88,013  (0.2%, 87.4%)    764  (0.1%, 65.6%)  flex128_decode_int:???
+
+>     100,453  (0.1%, 93.3%)         7  (0.0%, 92.7%)      1  (0.0%, 61.2%)    194,622  (0.4%, 87.8%)  4,404  (0.6%, 66.2%)  pmix_bfrops_base_tma_argv_split_inter.constprop.0:???
+
+>     303,450  (0.2%, 93.5%)    17,342  (0.4%, 93.1%)     15  (0.0%, 61.2%)    140,235  (0.3%, 88.1%)  4,693  (0.6%, 66.9%)  unlink_chunk.isra.0:???
+
+>     201,644  (0.1%, 93.6%)        69  (0.0%, 93.1%)      0  (0.0%, 61.2%)     94,122  (0.2%, 88.3%)     51  (0.0%, 66.9%)  ucs_async_handler_get:
+      174,760  (0.1%)               59  (0.0%)             0                    80,680  (0.2%)            47  (0.0%)           /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/async/async.c
+
+>      70,744  (0.0%, 93.6%)       875  (0.0%, 93.1%)    220  (0.3%, 61.5%)     70,736  (0.1%, 88.4%)    495  (0.1%, 66.9%)  __strchrnul_avx2:???
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /u/builder/builder/.jenkins/workspace/Builder/hwloc/build/hwloc/hwloc/topology-xml-nolibxml.c
+--------------------------------------------------------------------------------
+Unannotated because one or more of these original files are unreadable:
+- /u/builder/builder/.jenkins/workspace/Builder/hwloc/build/hwloc/hwloc/topology-xml-nolibxml.c
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /u/ipauser/msimonutti/hpc_exam/helper/../src/../libraries/stencil_template_parallel.h
+--------------------------------------------------------------------------------
+Dr_________________ D1mr_____________ DLmr__________ Bc________________ Bcm__________ 
+
+-- line 92 ----------------------------------------
+          .                 .              .                  .              .         inline int inject_energy ( const int      periodic,
+          .                 .              .                  .              .                                    const int      Nsources,
+          .                 .              .                  .              .         			   const vec2_t  *Sources,
+          .                 .              .                  .              .         			   const double   energy,
+          .                 .              .                  .              .                                          plane_t *plane,
+          .                 .              .                  .              .                                    const vec2_t   N
+          .                 .              .                  .              .                                    )
+          .                 .              .                  .              .         {
+        100  (0.0%)        99  (0.0%)      0                  0              0             const uint register sizex = plane->size[_x_]+2;
+          1  (0.0%)         0              0                  0              0             double * restrict data = plane->data;
+          .                 .              .                  .              .             
+          .                 .              .                  .              .            #define IDX( i, j ) ( (j)*sizex + (i) )
+        300  (0.0%)         0              0                600  (0.0%)      5 (0.0%)      for (int s = 0; s < Nsources; s++)
+          .                 .              .                  .              .                 {
+          .                 .              .                  .              .                     int x = Sources[s][_x_];
+          .                 .              .                  .              .                     int y = Sources[s][_y_];
+          .                 .              .                  .              .                     
+      1,200  (0.0%)       499  (0.0%)      4  (0.0%)          0              0                     data[ IDX(x,y) ] += energy;
+          .                 .              .                  .              .                     
+          .                 .              .                  .              .                     if ( periodic )
+          .                 .              .                  .              .                         {
+          .                 .              .                  .              .                             if ( (N[_x_] == 1)  )
+          .                 .              .                  .              .                                 {
+          .                 .              .                  .              .                                     if (x==1){
+          .                 .              .                  .              .                                     data[IDX(plane->size[_x_]+1,y)] += energy;
+          .                 .              .                  .              .                                 }
+-- line 117 ----------------------------------------
+-- line 162 ----------------------------------------
+          .                 .              .                  .              .         inline int update_plane ( const int      periodic, 
+          .                 .              .                  .              .                                   const vec2_t   N,         // the grid of MPI tasks
+          .                 .              .                  .              .                                   const plane_t *oldplane,
+          .                 .              .                  .              .                                         plane_t *newplane
+          .                 .              .                  .              .                                   )
+          .                 .              .                  .              .             
+          .                 .              .                  .              .         {
+          .                 .              .                  .              .             uint register fxsize = oldplane->size[_x_]+2;
+        200  (0.0%)         0              0                  0              0             uint register fysize = oldplane->size[_y_]+2;
+          .                 .              .                  .              .             
+          .                 .              .                  .              .             uint register xsize = oldplane->size[_x_];
+          .                 .              .                  .              .             uint register ysize = oldplane->size[_y_];
+          .                 .              .                  .              .             
+          .                 .              .                  .              .            #define IDX( i, j ) ( (j)*fxsize + (i) )
+          .                 .              .                  .              .             
+          .                 .              .                  .              .             // HINT: you may attempt to
+          .                 .              .                  .              .             //       (i)  manually unroll the loop
+-- line 178 ----------------------------------------
+-- line 179 ----------------------------------------
+          .                 .              .                  .              .             //       (ii) ask the compiler to do it
+          .                 .              .                  .              .             // for instance
+          .                 .              .                  .              .             // #pragma GCC unroll 4
+          .                 .              .                  .              .             //
+          .                 .              .                  .              .             // HINT: in any case, this loop is a good candidate
+          .                 .              .                  .              .             //       for openmp parallelization
+          .                 .              .                  .              .         
+          .                 .              .                  .              .             double * restrict old = oldplane->data;
+        100  (0.0%)         0              0                  0              0             double * restrict new = newplane->data;
+          .                 .              .                  .              .             
+      5,700  (0.0%)     1,403  (0.0%)      0              1,600  (0.0%)     15 (0.0%)      # pragma omp parallel for schedule(static) 
+          .                 .              .                  .              .             for (uint j = 1; j <= ysize; j++)
+     51,200  (0.0%)        54  (0.0%)      0         26,265,600 (50.5%) 51,608 (7.0%)          for ( uint i = 1; i <= xsize; i++)
+          .                 .              .                  .              .                     {
+          .                 .              .                  .              .                         
+          .                 .              .                  .              .                         // NOTE: (i-1,j), (i+1,j), (i,j-1) and (i,j+1) always exist even
+          .                 .              .                  .              .                         //       if this patch is at some border without periodic conditions;
+          .                 .              .                  .              .                         //       in that case it is assumed that the +-1 points are outside the
+          .                 .              .                  .              .                         //       plate and always have a value of 0, i.e. they are an
+          .                 .              .                  .              .                         //       "infinite sink" of heat
+          .                 .              .                  .              .                         
+          .                 .              .                  .              .                         // five-points stencil formula
+          .                 .              .                  .              .                         //
+          .                 .              .                  .              .                         // HINT : check the serial version for some optimization
+          .                 .              .                  .              .                         //
+          0                 0              0                  0              0                         new[ IDX(i,j) ] =
+104,857,600 (64.7%)    43,647  (1.0%)    446  (0.5%)          0              0                             old[ IDX(i,j) ] * 0.5 + ( old[IDX(i-1, j)] + old[IDX(i+1, j)] +
+ 26,265,600 (16.2%) 3,289,935 (73.5%) 32,701 (39.1%)          0              0                                                       old[IDX(i, j-1)] + old[IDX(i, j+1)] ) * 0.125;
+          .                 .              .                  .              .                         
+          .                 .              .                  .              .                     }
+          .                 .              .                  .              .         
+        600  (0.0%)       200  (0.0%)      0                100  (0.0%)      2 (0.0%)      if ( periodic )
+          .                 .              .                  .              .                 {
+          .                 .              .                  .              .                     if (N[_x_] == 1) // all proc in a single column, called by every proc
+          .                 .              .                  .              .                 {
+          .                 .              .                  .              .                     // propagate the boundaries as needed
+          .                 .              .                  .              .         
+          .                 .              .                  .              .                     for(int j = 0; j < ysize; j++){
+          .                 .              .                  .              .                         new[IDX(0, j+1)] = new[IDX(xsize, j+1)];
+          .                 .              .                  .              .                         new[IDX(xsize+1, j+1)] = new[IDX(1, j+1)];
+-- line 218 ----------------------------------------
+-- line 220 ----------------------------------------
+          .                 .              .                  .              .                     // check the serial version
+          .                 .              .                  .              .                 }
+          .                 .              .                  .              .         
+          .                 .              .                  .              .                 if (N[_y_] == 1)
+          .                 .              .                  .              .                 {
+          .                 .              .                  .              .         
+          .                 .              .                  .              .                     for(int j = 0; j < xsize; j++){
+          .                 .              .                  .              .                         new[IDX(j+1, 0)] = new[IDX(j+1, ysize)];
+          0                 0              0                  0              0                         new[IDX(j+1, ysize+1)] = new[IDX(j+1, 1)];
+          .                 .              .                  .              .                     }
+          .                 .              .                  .              .                 }
+          .                 .              .                  .              .                 }
+          .                 .              .                  .              .         
+          .                 .              .                  .              .             
+          .                 .              .                  .              .          #undef IDX
+          .                 .              .                  .              .           return 0;
+          .                 .              .                  .              .         }
+-- line 236 ----------------------------------------
+-- line 240 ----------------------------------------
+          .                 .              .                  .              .         inline int get_total_energy( plane_t *plane,
+          .                 .              .                  .              .                                      double  *energy )
+          .                 .              .                  .              .         /*
+          .                 .              .                  .              .          * NOTE: this routine a good candiadate for openmp
+          .                 .              .                  .              .          *       parallelization
+          .                 .              .                  .              .          */
+          .                 .              .                  .              .         {
+          .                 .              .                  .              .         
+          1  (0.0%)         1  (0.0%)      0                  0              0             const int register xsize = plane->size[_x_];
+          .                 .              .                  .              .             const int register ysize = plane->size[_y_];
+          0                 0              0                  0              0             const int register fsize = xsize+2;
+          .                 .              .                  .              .         
+          1  (0.0%)         0              0                  0              0             double * restrict data = plane->data;
+          .                 .              .                  .              .             
+          .                 .              .                  .              .            #define IDX( i, j ) ( (j)*fsize + (i) )
+          .                 .              .                  .              .         
+          .                 .              .                  .              .            #if defined(LONG_ACCURACY)    
+          .                 .              .                  .              .             long double totenergy = 0;
+          .                 .              .                  .              .            #else
+          .                 .              .                  .              .             double totenergy = 0;    
+          .                 .              .                  .              .            #endif
+          .                 .              .                  .              .         
+          .                 .              .                  .              .             // HINT: you may attempt to
+          .                 .              .                  .              .             //       (i)  manually unroll the loop
+          .                 .              .                  .              .             //       (ii) ask the compiler to do it
+          .                 .              .                  .              .             // for instance
+          .                 .              .                  .              .             // #pragma GCC unroll 4
+         45  (0.0%)        12  (0.0%)      0                  8  (0.0%)      3 (0.0%)      #pragma omp parallel for reduction(+:totenergy) schedule(static)
+          4  (0.0%)         0              0                  4  (0.0%)      1 (0.0%)      for ( int j = 1; j <= ysize; j++ )
+          0                 0              0             67,076  (0.1%)    531 (0.1%)          for ( int i = 1; i <= xsize; i++ )
+    262,144  (0.2%)    32,899  (0.7%)      0                  0              0                     totenergy += data[ IDX(i, j) ];
+          .                 .              .                  .              .         
+          .                 .              .                  .              .             
+          .                 .              .                  .              .            #undef IDX
+          .                 .              .                  .              .         
+          0                 0              0                  0              0             *energy = (double)totenergy;
+          .                 .              .                  .              .             return 0;
+          .                 .              .                  .              .         }
+          .                 .              .                  .              .         
+          .                 .              .                  .              .         int dump ( const double *data, const uint size[2], const char *filename);
+          .                 .              .                  .              .         
+          .                 .              .                  .              .         
+          .                 .              .                  .              .         
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/../sysdeps/generic/dl-new-hash.h
+--------------------------------------------------------------------------------
+Unannotated because one or more of these original files are unreadable:
+- /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/../sysdeps/generic/dl-new-hash.h
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/dl-lookup.c
+--------------------------------------------------------------------------------
+Unannotated because one or more of these original files are unreadable:
+- /usr/src/debug/glibc-2.40-24.fc41.x86_64/elf/dl-lookup.c
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/async/async.c
+--------------------------------------------------------------------------------
+Unannotated because one or more of these original files are unreadable:
+- /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/async/async.c
+
+--------------------------------------------------------------------------------
+-- Annotated source file: /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/sys/event_set.c
+--------------------------------------------------------------------------------
+Unannotated because one or more of these original files are unreadable:
+- /usr/src/debug/ucx-1.17.0-3.fc41.x86_64/src/ucs/sys/event_set.c
+
+--------------------------------------------------------------------------------
+-- Annotation summary
+--------------------------------------------------------------------------------
+Dr_________________ D1mr_____________ DLmr__________ Bc________________ Bcm____________ 
+
+131,444,796 (81.1%) 3,368,749 (75.2%) 33,151 (39.6%) 26,334,988 (50.6%)  52,165  (7.1%)    annotated: files known & above threshold & readable, line numbers known
+          0                 0              0                  0               0            annotated: files known & above threshold & readable, line numbers unknown
+          0                 0              0                  0               0          unannotated: files known & above threshold & two or more non-identical
+  3,064,114  (1.9%)    90,585  (2.0%)  7,019  (8.4%)  1,730,253  (3.3%)  57,012  (7.7%)  unannotated: files known & above threshold & unreadable 
+  4,810,151  (3.0%)   188,584  (4.2%) 20,546 (24.6%)  2,788,014  (5.4%) 101,581 (13.8%)  unannotated: files known & below threshold
+ 22,694,581 (14.0%)   830,768 (18.5%) 22,930 (27.4%) 21,163,788 (40.7%) 527,898 (71.5%)  unannotated: files unknown
+

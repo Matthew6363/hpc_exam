@@ -1,0 +1,23 @@
+#!/bin/bash
+#SBATCH --nodes=4                   # 1 node
+#SBATCH --ntasks=32                  # total MPI tasks across nodes
+#SBATCH --ntasks-per-node=8
+#SBATCH --cpus-per-task=16          # OpenMP threads per MPI task
+#SBATCH --mem=0                     # use all available memory
+#SBATCH --partition=EPYC
+#SBATCH -t 00:00:20                 # 5 minutes for profiling and test runs
+#SBATCH --job-name=testing
+
+# Set OpenMP variables
+export OMP_PLACES=cores
+export OMP_PROC_BIND=close
+export OMP_DISPLAY_AFFINITY=TRUE
+
+# Load MPI module if needed
+module load openMPI/5.0.5
+
+
+
+echo "Running default, non-optimized version"
+mpicc -D_XOPEN_SOURCE=700 -o main -march=native -O2 -std=c17 -fopenmp -Iinclude ../src/stencil_template_parallel.c
+srun --ntasks=32  --cpu-bind=cores  ./main -p 0 -o 0 -e 300 -v 1 > ../outputs/output_strong_3.log
