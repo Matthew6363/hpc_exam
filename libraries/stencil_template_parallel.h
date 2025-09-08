@@ -91,7 +91,7 @@ inline int inject_energy(const int periodic,
     double *restrict data = plane->data;
 
 #define IDX(i, j) ((j) * sizex + (i))
-    #pragma GCC unroll 4
+#pragma GCC unroll 4
     for (int s = 0; s < Nsources; s++)
     {
         int x = Sources[s][_x_];
@@ -159,13 +159,14 @@ inline int update_plane(const int periodic,
                         plane_t *newplane)
 
 {
-    uint register fxsize = oldplane->size[_x_] + 2;
-    uint register fysize = oldplane->size[_y_] + 2;
+    
 
     uint register xsize = oldplane->size[_x_];
     uint register ysize = oldplane->size[_y_];
 
-#define IDX(i, j) ((j) * fxsize + (i))
+    uint fsizex = xsize + 2;
+
+#define IDX(i, j) ((j) * fsizex + (i))
 
     // HINT: you may attempt to
     //       (i)  manually unroll the loop

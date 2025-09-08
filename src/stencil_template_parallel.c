@@ -30,6 +30,7 @@ int main(int argc, char **argv)
 
   plane_t planes[2];    // two planes to be used in this simulation plane[OLD] and plane[NEW]
   buffers_t buffers[2]; // two sets of buffers for sending and receiving
+  
 
   int output_energy_stat_perstep;
 
@@ -71,6 +72,8 @@ int main(int argc, char **argv)
 
   int current = OLD;       // set OLD as reading plane
   double t1 = MPI_Wtime(); /* take wall-clock time */
+  double compt_time = 0;
+  double comm_time = 0;
 
   for (int iter = 0; iter < Niterations; ++iter)
 
@@ -83,7 +86,7 @@ int main(int argc, char **argv)
     inject_energy(periodic, Nsources_local, sources_local, energy_per_source, &planes[current], N);
 
     /* -------------------------------------- */
-
+    // double t0= MPI_Wtime();
     // [A] fill the buffers, and/or make the buffers' pointers pointing to the correct position
     fill_buffers(buffers, &planes[current], neighbours, periodic, N);
 
@@ -92,16 +95,19 @@ int main(int argc, char **argv)
     
     //update_inner_plane(&planes[current], &planes[!current]);
     MPI_Waitall(8, reqs, MPI_STATUS_IGNORE);                                  // wait for all communications to be completed
-
+     
     // [C] copy the haloes data
     copy_received_halos(buffers, &planes[current], neighbours, periodic, N); // fill halo regions with data received from neighbours
-
+    
     /* --------------------------------------  */
     /* update grid points */
     //update_border_plane(periodic, N, &planes[current], &planes[!current]);
-
+    // double t1 = MPI_Wtime();
     update_plane(periodic, N, &planes[current], &planes[!current]);
-
+    // double t2 = MPI_Wtime();
+    
+    // compt_time += t2 - t1;
+    // comm_time += t1 - t0;
     /* output if needed */
     if (output_energy_stat_perstep)
     {
@@ -124,7 +130,22 @@ int main(int argc, char **argv)
 
   t1 = MPI_Wtime() - t1;
 
+  // make a global mean 
+  // double comm_sum_all = 0.0, comp_sum_all = 0.0;
+  // MPI_Reduce(&comm_time, &comm_sum_all, 1, MPI_DOUBLE, MPI_SUM, 0, myCOMM_WORLD);
+  // MPI_Reduce(&compt_time, &comp_sum_all, 1, MPI_DOUBLE, MPI_SUM, 0, myCOMM_WORLD);
+
+  // if (Rank == 0) {
+  //   int P; MPI_Comm_size(myCOMM_WORLD, &P);
+  //   double comm_mean_all = comm_sum_all/((double)P);
+  //   double comp_mean_all = comp_sum_all/((double)P);
+
+  //   printf("Elapsed time for communication (mean):%.16f---------\n", comm_mean_all);
+  //   printf("Elapsed time for computations (mean):%.16f---------\n", comp_mean_all);
+  // }
+
   printf("---------Rank: %d \t Elapsed time:%.6f---------\n", Rank, t1);
+
 
   output_energy_stat(-1, &planes[!current], Niterations * Nsources * energy_per_source, Rank, &myCOMM_WORLD);
 
@@ -278,7 +299,7 @@ inline int update_inner_plane(const plane_t *oldplane,
   double *restrict old = oldplane->data;
   double *restrict new = newplane->data;
 
-#pragma omp parallel for collapse(2) schedule(static)
+#pragma omp parallel for schedule(static)
   for (uint j = 2; j <= ysize - 1; j++)
     for (uint i = 2; i <= xsize - 1; i++)
       new[IDX(i, j)] = stencil_computation(old, fxsize, i, j);
@@ -303,7 +324,7 @@ inline int update_border_plane(const int periodic,
   double *restrict old = oldplane->data;
   double *restrict new = newplane->data;
 
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(dynamic)
   for (uint j = 1; j <= ysize; j++)
   {
     new[IDX(1, j)] = stencil_computation(old, fxsize, 1, j);         // left border
